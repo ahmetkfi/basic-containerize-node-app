@@ -1,0 +1,20 @@
+include:
+  - notebooks-backend/compose.yaml
+  - notes-backend/compose.yaml
+
+services:
+  reverse-proxy:
+    image: nginx:1.27.0
+    volumes:
+      - type: bind
+        source: ./reverse-proxy/nginx.conf
+        target: /etc/nginx/nginx.conf   # <-- burada ./ değil /
+    ports:
+      - 8080:80
+    networks:
+      - notes-app-net  
+    depends_on:
+      - notebooks
+      - notes
+networks:
+  notes-app-net:
